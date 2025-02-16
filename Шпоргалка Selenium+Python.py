@@ -25,6 +25,8 @@
     assert sunduk_value is not None, 'Значение сундука пустое' #проверяем что значение атрибута не пустое
 
 # Работа со списками
+#   https://stepik.org/lesson/228249/step/2?unit=200781
+
     from selenium.webdriver.support.ui import Select
 
     select = Select(browser.find_element(By.CSS_SELECTOR, '.custom-select'))
@@ -34,6 +36,16 @@
             select.select_by_index(index) #ищет элемент по его индексу или порядковому номеру
 
 # Загрузка файла:
+#   https://docs.python.org/3/library/os.path.html
+#   https://stepik.org/lesson/228249/step/7?unit=200781
+#   файл должен находится в одной и той же директории с исполняемым файлом
+
+    import os
+    load_file = browser.find_element(By.CSS_SELECTOR, "#file")
+    current_dir = os.path.abspath(os.path.dirname(__file__))    # получаем путь к директории текущего исполняемого файла
+    file_path = os.path.join(current_dir, 'file.txt')           # добавляем к этому пути имя файла
+    load_file.send_keys(file_path)
+
 
     load_image = browser.find_element(By.CSS_SELECTOR, "#file") #Выбор элемента на страницу
     current_dir = os.path.abspath(os.path.dirname(__file__)) 
@@ -58,6 +70,11 @@
                 #код на JS
                     button = document.getElementsByTagName("button")[0];
                     button.scrollIntoView(true);
+
+        # пример:
+            click_radio = browser.find_element(By.ID, 'robotsRule')
+            scroll = browser.execute_script("return arguments[0].scrollIntoView(true);", click_radio)
+            click_radio.click()
       
 # Работа с окнами:
 
