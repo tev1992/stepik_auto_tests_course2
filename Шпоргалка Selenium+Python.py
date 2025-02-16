@@ -1,13 +1,37 @@
+# Базовые действия с элементами
+    .text #получить текст из элемента
+    send_keys("Тест фамилия") # ввод значения
+    click() # кликнуть
+
 # Дичь калькуляторная
     def calc(x):
     return str(math.log(abs(12*math.sin(int(x)))))
 
-# получение значения атрибута
+# Ввод значения в поле для одного элемента
+    input_First_name = browser.find_element(By.CSS_SELECTOR, '.form-control.first[placeholder="Input your first name"]')
+    input_First_name.send_keys("Тест фамилия")
+
+# Ввод значения в поле для группы элементов
+    input1 = browser.find_elements(By.CSS_SELECTOR, "input[type='text']",)
+    for element in input1:
+    element.send_keys("тест")
+
+
+# Получение значения атрибута
 
     sunduk = browser.find_element(By.ID, 'treasure') #найти элемент
     sunduk_value = sunduk.get_attribute("valuex") #получаем значение атрибута valuex="667" (получим 667)
     print("Значение сундука ", sunduk_value) #вывод в консоль получение значение атрибута
     assert sunduk_value is not None, 'Значение сундука пустое' #проверяем что значение атрибута не пустое
+
+# Работа со списками
+    from selenium.webdriver.support.ui import Select
+
+    select = Select(browser.find_element(By.CSS_SELECTOR, '.custom-select'))
+    select.select_by_value(sum_int)
+            select_by_value(value):
+            select.select_by_visible_text("text") #ищет элемент по видимому тексту
+            select.select_by_index(index) #ищет элемент по его индексу или порядковому номеру
 
 # Загрузка файла:
 
@@ -23,11 +47,17 @@
     for imput1 in imput2:
         imput1.send_keys("тестовые данные")
  
-# Скролл
+# Скролл https://developer.mozilla.org/ru/docs/Web/API/Element/scrollIntoView
     browser.execute_script("return arguments[0].scrollIntoView(true);", button) # JS скрипт для скролла страницы чтобы стал видим
-    
+            button = browser.find_element(By.TAG_NAME, "button")
+            browser.execute_script("return arguments[0].scrollIntoView(true);", button)
+            button.click()
+
     browser.execute_script("window.scrollBy(0, 100);") #проскроллит страницу на 100 пикс
 
+                #код на JS
+                    button = document.getElementsByTagName("button")[0];
+                    button.scrollIntoView(true);
       
 # Работа с окнами:
 
