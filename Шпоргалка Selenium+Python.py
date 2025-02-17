@@ -1,5 +1,6 @@
 # Базовые действия с элементами
-    .text #получить текст из элемента
+from selenium.webdriver.support.expected_conditions import alert_is_present
+.text #получить текст из элемента
     send_keys("Тест фамилия") # ввод значения
     click() # кликнуть
 
@@ -77,6 +78,11 @@
             click_radio.click()
       
 # Работа с окнами:
+# https://stepik.org/lesson/184253/step/2?unit=158843
+
+    alert # окно с уведомлением только кнопка ОК
+    confirm # окно с уведомлением кнопка принять и отмена
+    promt # окно с полем ввода, кнопкой принять и отмена
 
     alert - принять
     
@@ -109,17 +115,18 @@
         prompt.accept()
 
 
-Переход на новую вкладку браузера
+# Переход на новую вкладку браузера
+# https://stepik.org/lesson/184253/step/5?unit=158843
     
     переход на новую вкладку:
         new_window = browser.window_handles[1] #Узнаем имя новой вкладки       
         browser.switch_to.window(new_window) #переключиться на новую вкладку
     
     Возвращение на предыдущую вкладку:
-        first_window = browser.window_handles[0] #Узнаем имя новой вкладки
+        first_window = browser.window_handles[0] #Узнаем имя текущей вкладки
         browser.switch_to.window(first_window) #переключиться на начальную вкладку
 
-Настройка ожиданий
+# Настройка ожиданий
 
     неявное ожидание (Implicit wait) #проставляется 1 раз на весь код
         browser.implicitly_wait(5) # говорим WebDriver искать каждый элемент в течение 5 секунд (проверяется что элемент появился на странице)
