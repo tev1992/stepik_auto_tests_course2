@@ -155,8 +155,17 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
 
 
 
-Проверка ожидаемого результата (Полное совпадение)
+# Проверка ожидаемого результата (Полное совпадение)
+# https://stepik.org/lesson/36285/step/7?unit=162401
 
+    1) assert abs(-42) == 42, "Не соответствует условие"
+    2) assert self.is_element_present('create_class_button', timeout=30), "No create class button"
+    3)  catalog_text = self.catalog_link.text # считываем текст и записываем его в переменную
+        assert catalog_text == "Каталог", \
+            f"Wrong language, got {catalog_text} instead of 'Каталог'"
+
+
+    Форматирование строк с помощью конкатенации
     actual_result = "abrakadabra"
     print("Wrong text, got " + actual_result + ", something wrong")
 
