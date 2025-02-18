@@ -127,6 +127,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
         browser.switch_to.window(first_window) #переключиться на начальную вкладку
 
 # Настройка ожиданий
+# https://stepik.org/lesson/181384/step/7?unit=156009
 
     неявное ожидание (Implicit wait) #проставляется 1 раз на весь код
         browser.implicitly_wait(5) # говорим WebDriver искать каждый элемент в течение 5 секунд (проверяется что элемент появился на странице)
@@ -147,6 +148,12 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
                 Кнопка может быть неактивной, то есть её нельзя кликнуть;
                 Кнопка может содержать текст, который меняется в зависимости от действий пользователя. Например, текст "Отправить" после нажатия кнопки поменяется на "Отправлено";
                 Кнопка может быть перекрыта каким-то другим элементом или быть невидимой
+
+    примеры:
+        # Ожидаем пока элемент не примет нужное значение
+        wait_value = WebDriverWait(browser, 12).until(EC.text_to_be_present_in_element((By.ID, 'price'), "$100"))
+
+
 
 Проверка ожидаемого результата (Полное совпадение)
 
