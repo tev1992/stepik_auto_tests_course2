@@ -1,31 +1,31 @@
-# Базовые действия с элементами
-from selenium.webdriver.support.expected_conditions import alert_is_present
-.text #получить текст из элемента
+Базовые действия с элементами
+    from selenium.webdriver.support.expected_conditions import alert_is_present
+    .text #получить текст из элемента
     send_keys("Тест фамилия") # ввод значения
     click() # кликнуть
+        
 
-# Дичь калькуляторная
+Дичь калькуляторная
     def calc(x):
     return str(math.log(abs(12*math.sin(int(x)))))
 
-# Ввод значения в поле для одного элемента
+Ввод значения в поле для одного элемента
     input_First_name = browser.find_element(By.CSS_SELECTOR, '.form-control.first[placeholder="Input your first name"]')
     input_First_name.send_keys("Тест фамилия")
 
-# Ввод значения в поле для группы элементов
+Ввод значения в поле для группы элементов
     input1 = browser.find_elements(By.CSS_SELECTOR, "input[type='text']",)
     for element in input1:
     element.send_keys("тест")
 
-
-# Получение значения атрибута
+Получение значения атрибута
 
     sunduk = browser.find_element(By.ID, 'treasure') #найти элемент
     sunduk_value = sunduk.get_attribute("valuex") #получаем значение атрибута valuex="667" (получим 667)
     print("Значение сундука ", sunduk_value) #вывод в консоль получение значение атрибута
     assert sunduk_value is not None, 'Значение сундука пустое' #проверяем что значение атрибута не пустое
 
-# Работа со списками
+Работа со списками
 #   https://stepik.org/lesson/228249/step/2?unit=200781
 
     from selenium.webdriver.support.ui import Select
@@ -35,8 +35,8 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
             select_by_value(value):
             select.select_by_visible_text("text") #ищет элемент по видимому тексту
             select.select_by_index(index) #ищет элемент по его индексу или порядковому номеру
-
-# Загрузка файла:
+            
+Загрузка файлов
 #   https://docs.python.org/3/library/os.path.html
 #   https://stepik.org/lesson/228249/step/7?unit=200781
 #   файл должен находится в одной и той же директории с исполняемым файлом
@@ -54,13 +54,13 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
     load_image.send_keys(file_path)
 
 
-# Задание одного значения для всех элементов (цикл)
+Задание одного значения для всех элементов (цикл)
     
     imput2 = browser.find_elements(By.CSS_SELECTOR, "input[type='text']")
     for imput1 in imput2:
         imput1.send_keys("тестовые данные")
  
-# Скролл https://developer.mozilla.org/ru/docs/Web/API/Element/scrollIntoView
+Скролл https://developer.mozilla.org/ru/docs/Web/API/Element/scrollIntoView
     browser.execute_script("return arguments[0].scrollIntoView(true);", button) # JS скрипт для скролла страницы чтобы стал видим
             button = browser.find_element(By.TAG_NAME, "button")
             browser.execute_script("return arguments[0].scrollIntoView(true);", button)
@@ -77,7 +77,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
             scroll = browser.execute_script("return arguments[0].scrollIntoView(true);", click_radio)
             click_radio.click()
       
-# Работа с окнами:
+Работа с окнами (alert):
 # https://stepik.org/lesson/184253/step/2?unit=158843
 
     alert # окно с уведомлением только кнопка ОК
@@ -114,8 +114,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
         prompt.send_keys("My answer")
         prompt.accept()
 
-
-# Переход на новую вкладку браузера
+Переход на новую вкладку браузера
 # https://stepik.org/lesson/184253/step/5?unit=158843
     
     переход на новую вкладку:
@@ -126,7 +125,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
         first_window = browser.window_handles[0] #Узнаем имя текущей вкладки
         browser.switch_to.window(first_window) #переключиться на начальную вкладку
 
-# Настройка ожиданий
+Настройка ожиданий
 # https://stepik.org/lesson/181384/step/7?unit=156009
 
     неявное ожидание (Implicit wait) #проставляется 1 раз на весь код
@@ -153,9 +152,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
         # Ожидаем пока элемент не примет нужное значение
         wait_value = WebDriverWait(browser, 12).until(EC.text_to_be_present_in_element((By.ID, 'price'), "$100"))
 
-
-
-# Проверка ожидаемого результата (Полное совпадение)
+Проверка ожидаемого результата (Полное совпадение)
 # https://stepik.org/lesson/36285/step/7?unit=162401
 
     1) assert abs(-42) == 42, "Не соответствует условие"
@@ -228,7 +225,7 @@ from selenium.webdriver.support.expected_conditions import alert_is_present
     конструкция if __name__ == "__main__" служит для подтверждения того, 
     что данный скрипт был запущен напрямую, а не вызван внутри другого файла в качестве модуля.
     
-unittest
+Unittest
     
     import unittest
 
@@ -274,3 +271,63 @@ unittest
 
         if __name__ == '__main__':
             unittest.main()
+               
+   
+PYTEST Vs unittest
+# https://stepik.org/lesson/193188/step/9?unit=167629
+
+    unittest:
+        self.assertEqual(a, b, msg="Значения разные")
+        PyTest:
+
+    PyTest:
+        assert a == b, "Значения разные"
+
+PYTEST (дополнительные команды% https://gist.github.com/amatellanes/12136508b816469678c2 )
+# https://stepik.org/lesson/193188/step/7?unit=167629
+
+    pytest -v scripts/selenium_scripts
+    # найти все тесты в директории scripts/selenium_scripts
+
+    pytest test_user_interface.py
+    # найти и выполнить все тесты в файле
+
+    pytest scripts/drafts.py::test_register_new_user_parametrized
+    # найти тест с именем test_register_new_user_parametrized в указанном файле в указанной директории и выполнить
+
+        1) дальше происходит рекурсивный поиск: то есть PyTest обойдет все вложенные директори
+        2) во всех директориях PyTest ищет файлы, которые удовлетворяют правилу  test_*.py или *_test.py (то есть начинаются на test_ или заканчиваются _test и имеют расширение .py
+        3) внутри всех этих файлов находит тестовые функции по следующему правилу:
+        4) все тесты, название которых начинается с test, которые находятся вне классов
+        5) все тесты, название которых начинается с test внутри классов, имя которых начинается с Test (и без метода __init__ внутри класса)
+
+    Правила:
+        Название исполняемого файла должно начанаться на test**
+        class TestLink(unittest.TestCase)
+            def test_link1(self)
+        команда для запуска pytest *Название исполняемого файла*
+
+
+    Если нужно проверить, что тест вызывает ожидаемое исключение, мы можем использовать специальную конструкцию with pytest.raises().
+    Например, можно проверить, что на странице сайта не должен отображаться какой-то элемент:
+    def test_exception1():
+    try:
+        browser = webdriver.Chrome()
+        browser.get("http://selenium1py.pythonanywhere.com/")
+        with pytest.raises(NoSuchElementException):
+            browser.find_element(By.CSS_SELECTOR, "button.btn")
+            pytest.fail("Не должно быть кнопки Отправить")
+    finally:
+        browser.quit()
+
+
+Фиксирование пакетов в requirements.txt
+    pip freeze > requirements.txt # сохранение пакетов
+    pip install -r requirements.txt # установка пакетов
+    
+        
+Фикстуры  
+# https://stepik.org/lesson/237257/step/1?unit=209645   
+    
+    
+      
