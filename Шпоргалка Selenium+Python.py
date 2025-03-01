@@ -328,6 +328,163 @@ PYTEST (дополнительные команды% https://gist.github.com/ama
         
 Фикстуры  
 # https://stepik.org/lesson/237257/step/1?unit=209645   
+    pytest -s test_fixture1.py #параметр -s, чтобы увидеть текст, который выводится командой print().
+    
+    Фикстуры, возвращающие значение
+        @pytest.fixture
+        def browser():
+            print("\nstart browser for test..")
+            browser = webdriver.Chrome()
+            return browser #вернет значение браузер
+    
+    Финализаторы — закрываем браузер    
+        @pytest.fixture
+        def browser():
+            print("\nstart browser for test..")
+            browser = webdriver.Chrome()
+            yield browser # финализатор
+            # этот код выполнится после завершения теста
+            print("\nquit browser..")
+            browser.quit()
+        
+    Область видимости scope
+         Для фикстур можно задавать область покрытия фикстур. Допустимые значения: “function”, “class”, “module”, “session”. 
+         Соответственно, фикстура будет вызываться один раз для тестового метода, один раз для класса, один раз для модуля или один раз для всех тестов, запущенных в данной сессии. 
+         
+         @pytest.fixture(scope="class") #фикстура будет вызываться 1 раз для класса
+        def browser():
+            print("\nstart browser for test..")
+            browser = webdriver.Chrome()
+            yield browser
+            print("\nquit browser..")
+            browser.quit()
+            
+    Автоиспользование фикстур   
+        При описании фикстуры можно указать дополнительный параметр autouse=True, который укажет, что фикстуру нужно запустить для каждого теста даже без явного вызова: 
+       
+       @pytest.fixture
+        def browser():
+            print("\nstart browser for test..")
+            browser = webdriver.Chrome()
+            yield browser
+            print("\nquit browser..")
+            browser.quit()
+
+        @pytest.fixture(autouse=True)
+        def prepare_data():
+            print()
+            print("preparing some critical data for every test")
+            
+            
+        Пример области видимоти фикстур
+            import pytest
+
+
+            @pytest.fixture(scope="class")
+            def prepare_faces():
+                print("^_^", "\n")
+                yield
+                print(":3", "\n")
+
+
+            @pytest.fixture()
+            def very_important_fixture():
+                print(":)", "\n")
+
+
+            @pytest.fixture(autouse=True)
+            def print_smiling_faces():
+                print(":-Р", "\n")
+
+
+            class TestPrintSmilingFaces():
+                def test_first_smiling_faces(self, prepare_faces, very_important_fixture): 
+                # фиксутра "prepare_faces" вызывается 1 раз для класса "TestPrintSmilingFaces" (^_^) по завершению теста (:3)
+                # фиксура "very_important_fixture" вызывается 1 раз для функции "test_first_smiling_faces"  (:))
+                # фиксура "print_smiling_faces" вызывается 2 раза для функций "test_first_smiling_faces" и "test_second_smiling_faces" хоть и не передаем ее как параметр  (:-Р) (:-Р)
+                    # какие-то проверки
+
+                def test_second_smiling_faces(self, prepare_faces):
+                    # какие-то проверки
+         
+PyTest (Маркировка)
+# https://stepik.org/lesson/236918/step/1?unit=209305
+ 
+    запуск тестов с нужной маркировков "smoke"
+        pytest -s -v -m smoke test_fixture8.py # -m запуск с нужной маркировков (smoke) в данном случае 
+            @pytest.mark.smoke
+    Запуск всех тестов за исключением "smoke"
+        pytest -s -v -m "not smoke" test_fixture8.py
+            @pytest.mark.smoke
+    Запуск тестов с разными метками ИЛИ
+        pytest -s -v -m "smoke or regression" test_fixture8.py
+            @pytest.mark.smoke
+            @pytest.mark.regression
+    Запуск тестов с разными метками И
+        pytest -s -v -m "smoke and win10" test_fixture81.py
+            @pytest.mark.smoke
+            @pytest.mark.win10
+            
+    Пропуск тестов
+            @pytest.mark.smoke
+            @pytest.mark.win10
+            @pytest.mark.skip: # должен быть последним маркером , пример:
+            
+    Запуск тестов с проваленным кейсом, чтобы увидеть сообщение
+        pytest -v -s -rx test_les_3_5.py
+                
     
     
-      
+    
+    регистрация меток в pytest.ini
+    
+        [pytest]
+        markers =
+            smoke: marker for smoke tests
+            regression: marker for regression tests
+        
+        запуск для win10        
+        [pytest] 
+        markers =
+            smoke: marker for smoke tests
+            regression: marker for regression tests
+            win10
+            
+    Пример:
+        import pytest
+        from selenium import webdriver
+        from selenium.webdriver.common.by import By
+
+        link = "http://selenium1py.pythonanywhere.com/"
+
+
+        @pytest.fixture(scope="function")
+        def browser():
+            print("\nstart browser for test..")
+            browser = webdriver.Chrome()
+            yield browser
+            print("\nquit browser..")
+            browser.quit()
+
+
+        class TestMainPage1:
+
+            @pytest.mark.smoke
+            def test_guest_should_see_login_link(self, browser):
+                browser.get(link)
+                browser.find_element(By.CSS_SELECTOR, "#login_link")
+
+            @pytest.mark.smoke
+            @pytest.mark.win10
+            def test_guest_should_see_basket_link_on_the_main_page(self, browser):
+                browser.get(link)
+                browser.find_element(By.CSS_SELECTOR, ".basket-mini .btn-group > a")
+
+    XFail: помечать тест как ожидаемо падающий
+            @pytest.mark.xfail #добавление маркировки для падающего теста, чтобы прогонялись другие
+            @pytest.mark.xfail(reason="fixing this bug right now") # видеть в консоли сообщение падающего теста
+            
+    XPASS-тесты
+        pytest -rX -v test_fixture10b.py
+            XPASS test_les_3_5.py::TestMainPage1::test_guest_should_see_search_button_on_the_main_page - fixing this bug right now
+                2 passed, 1 xpassed 
