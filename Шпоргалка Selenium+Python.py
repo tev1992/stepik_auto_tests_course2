@@ -4,7 +4,6 @@
     send_keys("Тест фамилия") # ввод значения
     click() # кликнуть
         
-
 Дичь калькуляторная
     def calc(x):
     return str(math.log(abs(12*math.sin(int(x)))))
@@ -480,11 +479,14 @@ PyTest (Маркировка)
                 browser.get(link)
                 browser.find_element(By.CSS_SELECTOR, ".basket-mini .btn-group > a")
 
-    XFail: помечать тест как ожидаемо падающий
-            @pytest.mark.xfail #добавление маркировки для падающего теста, чтобы прогонялись другие
-            @pytest.mark.xfail(reason="fixing this bug right now") # видеть в консоли сообщение падающего теста
-            
-    XPASS-тесты
-        pytest -rX -v test_fixture10b.py
-            XPASS test_les_3_5.py::TestMainPage1::test_guest_should_see_search_button_on_the_main_page - fixing this bug right now
+    XFail , XPASS 
+        https://pytest-docs-ru.readthedocs.io/ru/latest/skipping.html
+    
+        XFail: помечать тест как ожидаемо падающий
+                @pytest.mark.xfail #добавление маркировки для падающего теста, чтобы прогонялись другие
+                @pytest.mark.xfail(reason="fixing this bug right now") # видеть в консоли сообщение падающего теста
+                
+        XPASS-тесты - для получения  подробную информацию по XPASS-тестам:
+            pytest -rX -v test_fixture10b.py
+                XPASS test_les_3_5.py::TestMainPage1::test_guest_should_see_search_button_on_the_main_page - fixing this bug right now
                 2 passed, 1 xpassed 
