@@ -490,3 +490,9 @@ PyTest (Маркировка)
             pytest -rX -v test_fixture10b.py
                 XPASS test_les_3_5.py::TestMainPage1::test_guest_should_see_search_button_on_the_main_page - fixing this bug right now
                 2 passed, 1 xpassed 
+
+PyTest (conftest)
+ # https://stepik.org/lesson/237240/step/1?unit=209628
+    Conftest.py — конфигурация тестов
+        
+    

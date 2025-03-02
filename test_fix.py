@@ -14,15 +14,6 @@ def calc(x):
     x1 = str(math.log(abs(12 * math.sin(int(x)))))
     return x1
 
-@pytest.fixture(scope='class')
-def browser():
-    browser = webdriver.Chrome()
-    # browser.get(link)
-    # return browser
-    yield browser
-    browser.close()
-    browser.quit()
-
 
 @pytest.mark.smoke
 class Testlink1():
@@ -111,25 +102,4 @@ class Testlink2():
         OR_result = "Congrats, you've passed the task! Copy this code as the answer to Stepik quiz:"
         assert OR_result in FR_result, f"Ожидаемый результат: \n'{OR_result}' \nне соответствует фактическому: \n'{FR_result}'"
         alert.accept()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
