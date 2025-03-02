@@ -32,12 +32,12 @@ class TestAuth():
 
     def test_input_login(self, browser):
         input_login = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#id_login_email[name="login"]')))
-        input_login.send_keys("tev1992@yandex.ru")
+        input_login.send_keys("емаил")
         assert input_login is not None, f"Поле {input_login} не заполнилось"
 
     def test_input_password(self, browser):
         input_password = browser.find_element(By.CSS_SELECTOR, '#id_login_password[name="password"]')
-        input_password.send_keys("okay147369")
+        input_password.send_keys("пароль")
         assert input_password is not None, f"Поле {input_password} не заполнилось"
 
     def test_click_button(self, browser):
