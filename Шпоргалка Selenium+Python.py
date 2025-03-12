@@ -345,7 +345,9 @@ PYTEST (дополнительные команды% https://gist.github.com/ama
             # этот код выполнится после завершения теста
             print("\nquit browser..")
             browser.quit()
-        
+            
+    ------------------------------  
+     
     Область видимости scope
          Для фикстур можно задавать область покрытия фикстур. Допустимые значения: “function”, “class”, “module”, “session”. 
          Соответственно, фикстура будет вызываться один раз для тестового метода, один раз для класса, один раз для модуля или один раз для всех тестов, запущенных в данной сессии. 
@@ -357,7 +359,9 @@ PYTEST (дополнительные команды% https://gist.github.com/ama
             yield browser
             print("\nquit browser..")
             browser.quit()
-            
+    
+    ------------------------------     
+    
     Автоиспользование фикстур   
         При описании фикстуры можно указать дополнительный параметр autouse=True, который укажет, что фикстуру нужно запустить для каждого теста даже без явного вызова: 
        
@@ -433,7 +437,7 @@ PyTest (Маркировка)
         pytest -v -s -rx test_les_3_5.py
                 
     
-    
+    ------------------------------ 
     
     регистрация меток в pytest.ini
     
@@ -503,6 +507,8 @@ PyTest (conftest)
             │   └── conftest.py
             │   └── test_main_page.py
     
+    ------------------------------ 
+    
     Параметризация тестов 
         PyTest позволяет запустить один и тот же тест с разными входными параметрами
         @pytest.mark.parametrize()
@@ -537,3 +543,35 @@ PyTest (conftest)
 
                 def test_guest_should_see_navbar_element(self, browser, language):
                     # этот тест тоже запустится дважды
+                    
+        ------------------------------      
+        
+        пример 3
+             @pytest.mark.parametrize(
+                 'creds', 
+                 [
+                    pytest.param(('1@mail.ru', 'pas123'), id='любое, значение')
+                    pytest.param(('2@mail.ru', 'pas123'), id='любое, значение')
+                    pytest.param(('3@mail.ru', 'pas123'), id='любое, значение')   
+                 ]
+             )
+             def test_login(creds)
+             login, passw = creds
+             
+        ------------------------------ 
+             
+        улучшение для примера 3
+        
+        users = ['1@mail.ru' '2@mail.ru' '3@mail.ru']
+        passws = ['123', '1234', '12345']
+        
+        def generate_pairs():
+            pairs = []
+            for user in users:
+                from passw in passws:
+                    pairs.append(pytest.param((user, passw) id=f'{user}, {passw}'))
+            return pairs
+                    
+        @pytest.mark.parametrize('creds', generate_pairs())
+        def test_login(creds)
+             login, passw = creds

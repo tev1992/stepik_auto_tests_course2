@@ -1,0 +1,58 @@
+import time
+import pytest
+import math
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+class TestAuth():
+    # try:
+    def test_open_link(self, browser):
+        link = "https://stepik.org/lesson/236895/step/1?auth=login"
+        browser.get(link)
+
+    def test_input_login(self, browser):
+        input_login = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#id_login_email[name="login"]')))
+        input_login.send_keys("tev1992@yandex.ru")
+        assert input_login is not None, f"Поле {input_login} не заполнилось"
+
+    def test_input_password(self, browser):
+        input_password = browser.find_element(By.CSS_SELECTOR, '#id_login_password[name="password"]')
+        input_password.send_keys("okay147369")
+        assert input_password is not None, f"Поле {input_password} не заполнилось"
+
+    def test_click_button(self, browser):
+        clik_button = browser.find_element(By.CSS_SELECTOR, '[type="submit"]').click()
+        time.sleep(4)
+
+
+@pytest.mark.parametrize('links', ["236895", "236896" , "236897"])#, "236898", "236899", "236903", "236904","236905"])
+def test_open_link1(self, browser, links):
+    link1 = f"https://stepik.org/lesson/{links}/step/1"
+    browser.get(link1)
+    answer = str(math.log(int(time.time())))
+    browser.implicitly_wait(5)
+
+        # try:
+        #     time.sleep(4)
+        #     click_replay = WebDriverWait(browser,10).until(
+        #         EC.visibility_of_element_located(By.CSS_SELECTOR, '.again-btn')).click()
+        #
+        #     click_replay1 = WebDriverWait(browser, 5).until_not(
+        #         EC.visibility_of_element_located(By.CSS_SELECTOR, '.again-btn'))
+        #
+        #
+        # except Exception as e:
+        #
+
+    input1 = WebDriverWait(browser, 5).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'textarea'))).send_keys(answer)
+
+    click_button = WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.submit-submission'))).click()
+
+    search_result = WebDriverWait(browser, 5).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.smart-hints__hint'))).text
+
+    assert "Correct!" in search_result, f"результат {search_result}"
+
+
+
