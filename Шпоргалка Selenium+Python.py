@@ -495,7 +495,7 @@ PyTest (Маркировка)
                 XPASS test_les_3_5.py::TestMainPage1::test_guest_should_see_search_button_on_the_main_page - fixing this bug right now
                 2 passed, 1 xpassed 
 
-PyTest (conftest)
+PyTest (conftest) - параметризация тестов
  # https://stepik.org/lesson/237240/step/1?unit=209628
     Conftest.py — конфигурация тестов
        
@@ -546,7 +546,7 @@ PyTest (conftest)
                     
         ------------------------------      
         
-        пример 3
+        пример 3 (из урока на ютубе)
              @pytest.mark.parametrize(
                  'creds', 
                  [
@@ -560,7 +560,7 @@ PyTest (conftest)
              
         ------------------------------ 
              
-        улучшение для примера 3
+        улучшение для примера 3 (из урока на ютубе)
         
         users = ['1@mail.ru' '2@mail.ru' '3@mail.ru']
         passws = ['123', '1234', '12345']
@@ -575,3 +575,26 @@ PyTest (conftest)
         @pytest.mark.parametrize('creds', generate_pairs())
         def test_login(creds)
              login, passw = creds
+             
+    Непрямая параметризация
+        
+        пример: 2 теста выполняется из 1 фикстуры по условию открывается разные ссылки
+        
+        @pytest.fixture()
+        def page(request):
+            deriver = webdriver.Chome()
+            driver.implicitly_wait(5)
+            param = request.param
+            if param == 'wats_new':
+                driver.get('ссылка на страницу1')
+            elif param == 'sale'
+                driver.get('ссылка на страницу2')
+
+        @pytest.mark.parametrize('page', ['wats_new'], indirect=True) 
+        def test_wats_new(page):
+            дуйствия на странице 'ссылка на страницу1'
+            
+        @pytest.mark.parametrize('page', ['sale'], indirect=True)
+        def test_wats_new(page):
+            уйствия на странице 'ссылка на страницу2'
+            
