@@ -607,8 +607,7 @@ PyTest (conftest) - параметризация тестов
             from selenium import webdriver
 
             def pytest_addoption(parser):
-                parser.addoption('--browser_name', action='store', default=None,
-                                 help="Choose browser: chrome or firefox")
+                parser.addoption('--browser_name', action='store', default="chrome", help='Choose browser: chrome or firefox')
 
 
             @pytest.fixture(scope="function")
@@ -626,3 +625,23 @@ PyTest (conftest) - параметризация тестов
                 yield browser
                 print("\nquit browser..")
                 browser.quit()
+     
+Плагины и перезапуск тестов, локализация тестов 
+    https://stepik.org/lesson/237240/step/8?auth=login&unit=209628
+     
+    Команды для перезапуска проваленных тестов:
+        pytest -v --tb=line --reruns 1 --browser_name=chrome test_rerun.py 
+            #--tb=line (сократить лог с результатами теста)
+            #--reruns n, где n — это количество перезапусков
+            
+            можно в pytest.ini добавить
+                [pytest]
+                addopts = --reruns 1
+
+                markers =
+                    smoke: marker for smoke tests
+                    regression: marker for regression tests
+                    win11
+                    
+    Запуск автотестов для разных языков интерфейса
+        
