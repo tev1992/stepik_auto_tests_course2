@@ -270,8 +270,7 @@ Unittest
 
         if __name__ == '__main__':
             unittest.main()
-               
-   
+                 
 PYTEST Vs unittest
 # https://stepik.org/lesson/193188/step/9?unit=167629
 
@@ -435,6 +434,8 @@ PyTest (Маркировка)
             
     Запуск тестов с проваленным кейсом, чтобы увидеть сообщение
         pytest -v -s -rx test_les_3_5.py
+        
+    
                 
     
     ------------------------------ 
@@ -598,3 +599,30 @@ PyTest (conftest) - параметризация тестов
         def test_wats_new(page):
             уйствия на странице 'ссылка на страницу2'
             
+            
+    Conftest.py и передача параметров в командной строке
+    
+            пример (conftest.py):
+            import pytest
+            from selenium import webdriver
+
+            def pytest_addoption(parser):
+                parser.addoption('--browser_name', action='store', default=None,
+                                 help="Choose browser: chrome or firefox")
+
+
+            @pytest.fixture(scope="function")
+            def browser(request):
+                browser_name = request.config.getoption("browser_name")
+                browser = None
+                if browser_name == "chrome":
+                    print("\nstart chrome browser for test..")
+                    browser = webdriver.Chrome()
+                elif browser_name == "firefox":
+                    print("\nstart firefox browser for test..")
+                    browser = webdriver.Firefox()
+                else:
+                    raise pytest.UsageError("--browser_name should be chrome or firefox")
+                yield browser
+                print("\nquit browser..")
+                browser.quit()
