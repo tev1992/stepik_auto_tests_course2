@@ -7,6 +7,18 @@
 Дичь калькуляторная
     def calc(x):
     return str(math.log(abs(12*math.sin(int(x)))))
+    
+Полезности
+   is_displayed() # Проверяем, отображается ли кнопка с помощью метода
+    пример кода:
+            try:
+                button = browser.find_element(By.CSS_SELECTOR, '.btn-add-to-basket')
+                if button.is_displayed():
+                    print("Кнопка отображается на странице.")
+                else:
+                    print('Кнопка не отображается на странице')
+            except NoSuchElementException:
+                print('Кнопка не найдена')
 
 Ввод значения в поле для одного элемента
     input_First_name = browser.find_element(By.CSS_SELECTOR, '.form-control.first[placeholder="Input your first name"]')
@@ -643,5 +655,57 @@ PyTest (conftest) - параметризация тестов
                     regression: marker for regression tests
                     win11
                     
-    Запуск автотестов для разных языков интерфейса
+Запуск автотестов для разных языков интерфейса и браузера
+
+        Команды для запуска 
+             pytest --language=es --browser_name=Firefox test_items.py
+
+
+    conftest.py
+       
+       from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.firefox.options import Options as OptionsFirefox
+        from _pytest.fixtures import FixtureRequest
+        import pytest
+
+        language_support = ["en", "fr", "es", "ru"]
+
+        def pytest_addoption(parser):
+            parser.addoption('--language', action='store', default=None, help='Выбери локализацию тестов: "--language=en" or "--language=ru"')
+            parser.addoption('--browser_name', action='store', default="Chrome", help='Выбери браузер: "--browser_name=chrome" or "--browser_name=firefox"')
+
+        # Фикстура для настройки браузера с учетом языка и выбора браузера
+        @pytest.fixture(scope='function')
+        # def browser(request: FixtureRequest):
+        def browser(request):
+            user_language = request.config.getoption('language')
+            browser_name = request.config.getoption('browser_name')
+
+            # Проверка поддерживаемого языка
+            if user_language not in language_support:
+                raise pytest.UsageError(f"Выбери локализацию тестов из {language_support}")
+
+            # Настройка браузера
+            if browser_name == 'Chrome':
+                options = Options()
+                options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+                browser = webdriver.Chrome(options=options)
+            elif browser_name == 'Firefox':
+                options_firefox = OptionsFirefox()
+                options_firefox.set_preference('intl.accept_languages', user_language)
+                browser = webdriver.Firefox(options=options_firefox)
+            else:
+                raise pytest.UsageError("Выбери локализацию тестов: из ['es', 'en', 'fr', 'ru'] и выбранный браузер")
+            yield browser
+            print('\nЗакрытие браузера')
+            browser.quit()
         
+    test_item.py
+        def test_items(browser):
+            # user_language = request.config.getoption('language')
+            # link = f'http://selenium1py.pythonanywhere.com/{user_language}/catalogue/coders-at-work_207/' # без переменной {user_language} не запускался код в нужной локализации
+            link = f'http://selenium1py.pythonanywhere.com//catalogue/coders-at-work_207/'
+            browser.get(link)
+            time.sleep(5)
+            assert browser.find_element(By.CSS_SELECTOR, '.btn-add-to-basket').is_displayed(), 'Кнопка не найдена на странице'
