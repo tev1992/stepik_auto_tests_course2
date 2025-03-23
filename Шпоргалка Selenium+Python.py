@@ -163,6 +163,12 @@
         # Ожидаем пока элемент не примет нужное значение
         wait_value = WebDriverWait(browser, 12).until(EC.text_to_be_present_in_element((By.ID, 'price'), "$100"))
 
+Assert
+    Проверка отображение элемента
+        #если изменить селектор, то тест упадет и выведется сообщение "Элемент не найден"
+        button = browser.find_elements(By.CSS_SELECTOR, "button.btn.btn-add-to-basket1")
+        assert button, "Элемент не найден"
+
 Проверка ожидаемого результата (Полное совпадение)
 # https://stepik.org/lesson/36285/step/7?unit=162401
 
@@ -663,29 +669,17 @@ PyTest (conftest) - параметризация тестов
 
     conftest.py
        
-       from selenium import webdriver
-        from selenium.webdriver.chrome.options import Options
-        from selenium.webdriver.firefox.options import Options as OptionsFirefox
-        from _pytest.fixtures import FixtureRequest
-        import pytest
-
-        language_support = ["en", "fr", "es", "ru"]
-
         def pytest_addoption(parser):
-            parser.addoption('--language', action='store', default=None, help='Выбери локализацию тестов: "--language=en" or "--language=ru"')
-            parser.addoption('--browser_name', action='store', default="Chrome", help='Выбери браузер: "--browser_name=chrome" or "--browser_name=firefox"')
+            parser.addoption('--language', action='store', default=None, help='Выбери локализацию тестов: "--language"')
+            parser.addoption('--browser_name', action='store', default='Chrome', help='Выбери браузер: "--browser_name=chrome" or "--browser_name=firefox"')
 
-        # Фикстура для настройки браузера с учетом языка и выбора браузера
         @pytest.fixture(scope='function')
-        # def browser(request: FixtureRequest):
         def browser(request):
             user_language = request.config.getoption('language')
             browser_name = request.config.getoption('browser_name')
-
-            # Проверка поддерживаемого языка
-            if user_language not in language_support:
-                raise pytest.UsageError(f"Выбери локализацию тестов из {language_support}")
-
+            # Проверка, что язык указан при запуске тестов
+            if user_language is None:
+                raise pytest.UsageError("Выбери локализацию тестов, пример: ['--language=es', '--language=en', '--language=fr', '--language=ru']")
             # Настройка браузера
             if browser_name == 'Chrome':
                 options = Options()
@@ -695,17 +689,20 @@ PyTest (conftest) - параметризация тестов
                 options_firefox = OptionsFirefox()
                 options_firefox.set_preference('intl.accept_languages', user_language)
                 browser = webdriver.Firefox(options=options_firefox)
+            # Проверка, если браузер не задан, по умолчанию открывается 'Chrome'
             else:
-                raise pytest.UsageError("Выбери локализацию тестов: из ['es', 'en', 'fr', 'ru'] и выбранный браузер")
+                raise pytest.UsageError("выбери браузер: 'Сhrome' или 'Firefox'")
             yield browser
             print('\nЗакрытие браузера')
             browser.quit()
-        
+            
+            
     test_item.py
-        def test_items(browser):
-            # user_language = request.config.getoption('language')
-            # link = f'http://selenium1py.pythonanywhere.com/{user_language}/catalogue/coders-at-work_207/' # без переменной {user_language} не запускался код в нужной локализации
-            link = f'http://selenium1py.pythonanywhere.com//catalogue/coders-at-work_207/'
+       
+        def test_add_to_card_button_id_displayed(browser):
+            link = 'http://selenium1py.pythonanywhere.com//catalogue/coders-at-work_207/'
             browser.get(link)
-            time.sleep(5)
-            assert browser.find_element(By.CSS_SELECTOR, '.btn-add-to-basket').is_displayed(), 'Кнопка не найдена на странице'
+            try:
+                button = browser.find_element(By.CSS_SELECTOR, '.btn-add-to-basket')
+            except NoSuchElementException:
+                assert False, 'Кнопка не найдена на странице'
