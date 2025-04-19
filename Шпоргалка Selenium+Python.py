@@ -1,3 +1,6 @@
+PIP
+    pip install --upgrade selenium
+
 Базовые действия с элементами
     from selenium.webdriver.support.expected_conditions import alert_is_present
     .text #получить текст из элемента
@@ -663,6 +666,7 @@ PyTest (conftest) - параметризация тестов
                     
 Запуск автотестов для разных языков интерфейса и браузера
 
+
         Команды для запуска 
              pytest --language=es --browser_name=Firefox test_items.py
 
@@ -706,3 +710,41 @@ PyTest (conftest) - параметризация тестов
                 button = browser.find_element(By.CSS_SELECTOR, '.btn-add-to-basket')
             except NoSuchElementException:
                 assert False, 'Кнопка не найдена на странице'
+                
+ООП
+    пример:
+            class Car: # Конструктор с АРГУМЕНТАМИ color и model
+
+            def __init__(self, color, model): # АТРИБУТЫ - это self.color и self.model
+
+                self.color = color # атрибут color получает значение из аргумента color
+
+                self.model = model # атрибут model получает значение из аргумента model
+
+                self.speed = 0 # атрибут со значением по умолчанию (не из аргументов)
+
+                # Метод с АРГУМЕНТОМ new_speed
+
+            def set_speed(self, new_speed):
+
+                self.speed = new_speed # меняем АТРИБУТ speed
+
+        Разница:
+
+        АРГУМЕНТЫ - это то, что передается В метод (как параметры функции)
+        АТРИБУТЫ - это данные, которые ХРАНЯТСЯ в объекте (с self.)
+        Простое правило:
+
+        Если что-то передается В СКОБКАХ метода - это аргумент
+        Если что-то пишется с self. - это атрибут
+        Аргумент не может храниться, только передаваться
+
+        "Так как браузер у нас хранится как атрибут класса BasePage, обращаться к нему нужно соответствующим образом с помощью self: "
+
+        Последнее было не очевидно почему второе истекает из первого. Объяснение - все атрибуты всегда доступны с помощью self, и только через self.
+        
+    __init__
+    без __init__.py в папке pages
+        команды для запуска будет:  python -m pytest -v --tb=line --language=en test_main_page.py
+    
+    _init__.py в папке pages команда для зпуска будет: pytest -v --tb=line --language=en test_main_page.py
